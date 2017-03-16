@@ -227,26 +227,8 @@ public final class PasswordSpecification implements Parcelable {
      * The specification permits passwords between 12 and 16 characters in length, composed of at
      * least one lower case letter, one upper case letter, and one numeral. All other characters
      * must be alphanumeric.
-     *
-     * <p>Characters which are difficult to distinguish are disallowed in this specification,
-     * as it is tailored towards password generation rather than validation - see
-     * {@link #DEFAULT_FOR_VALIDATION} for a password specification suited to validating user
-     * entered passwords.
      */
-    public static final PasswordSpecification DEFAULT = new PasswordSpecification.Builder()
-            .ofLength(DEFAULT_MIN_PASSWORD_LENGTH, DEFAULT_MAX_PASSWORD_LENGTH)
-            .allow(ALPHANUMERIC_DISTINGUISHABLE)
-            .require(LOWER_ALPHA_DISTINGUISHABLE, 1)
-            .require(UPPER_ALPHA_DISTINGUISHABLE, 1)
-            .require(NUMERALS_DISTINGUISHABLE, 1)
-            .build();
-
-    /**
-     * A default password specification, intended for use in validating user entered passwords.
-     * This differs from {@link #DEFAULT} in that characters which are difficult to distinguish
-     * are permitted.
-     */
-    public static final PasswordSpecification DEFAULT_FOR_VALIDATION =
+    public static final PasswordSpecification DEFAULT =
             new PasswordSpecification.Builder()
                     .ofLength(DEFAULT_MIN_PASSWORD_LENGTH, DEFAULT_MAX_PASSWORD_LENGTH)
                     .allow(ALPHANUMERIC)
@@ -255,11 +237,26 @@ public final class PasswordSpecification implements Parcelable {
                     .require(NUMERALS, 1)
                     .build();
 
+
+    /**
+     * A default password specification, intended for authentication systems where characters that
+     * are difficult to distinguish in user input fields are disallowed.
+     */
+    public static final PasswordSpecification DEFAULT_DISTINGUISHABLE =
+            new PasswordSpecification.Builder()
+                    .ofLength(DEFAULT_MIN_PASSWORD_LENGTH, DEFAULT_MAX_PASSWORD_LENGTH)
+                    .allow(ALPHANUMERIC_DISTINGUISHABLE)
+                    .require(LOWER_ALPHA_DISTINGUISHABLE, 1)
+                    .require(UPPER_ALPHA_DISTINGUISHABLE, 1)
+                    .require(NUMERALS_DISTINGUISHABLE, 1)
+                    .build();
+
     private static final int ASCII_PRINTABLE_RANGE_LOWER = 32;
     private static final int ASCII_PRINTABLE_RANGE_UPPER = 126;
 
     /**
      * Utility method to check if the password is conformant to the specification defined.
+     *
      * @param result the result of the @link #checkConformance(String) checkConformance} method.
      * @return true if password is conforming to specs.
      */

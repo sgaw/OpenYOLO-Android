@@ -139,6 +139,18 @@ public class PasswordSpecificationTest {
         // one character too long
         assertEquals(PASSWORD_LENGTH_MISMATCH, spec.checkConformance("LetmeinNoPeace567"));
 
+        // empty password
+        assertEquals(PASSWORD_LENGTH_MISMATCH | PASSWORD_REQUIRED_CHARACTER_MISSING,
+                spec.checkConformance(""));
+
+        // too short, missing a number
+        assertEquals(PASSWORD_LENGTH_MISMATCH | PASSWORD_REQUIRED_CHARACTER_MISSING,
+                spec.checkConformance("LetmeinPce"));
+    }
+
+    @Test
+    public void testCheckConformance_defaultDistinguishable() throws Exception {
+        PasswordSpecification spec = PasswordSpecification.DEFAULT_DISTINGUISHABLE;
         // non-distinguishable lower case letter (l)
         assertEquals(PASSWORD_DISALLOWED_CHARACTER, spec.checkConformance("letmeinPeace5"));
 
@@ -151,13 +163,6 @@ public class PasswordSpecificationTest {
         // non alpha-numeric character (!)
         assertEquals(PASSWORD_DISALLOWED_CHARACTER, spec.checkConformance("L3tmeinPeace!"));
 
-        // empty password
-        assertEquals(PASSWORD_LENGTH_MISMATCH | PASSWORD_REQUIRED_CHARACTER_MISSING,
-                spec.checkConformance(""));
-
-        // too short, missing a number
-        assertEquals(PASSWORD_LENGTH_MISMATCH | PASSWORD_REQUIRED_CHARACTER_MISSING,
-                spec.checkConformance("LetmeinPce"));
 
         // missing a number, contains non-alpha numeric character (!)
         assertEquals(PASSWORD_REQUIRED_CHARACTER_MISSING | PASSWORD_DISALLOWED_CHARACTER,
